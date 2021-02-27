@@ -1,4 +1,5 @@
 import { RpcServer } from "../common";
+import { Tx } from "./tx";
 
 export class EthereumProvider {
   private _rpc: RpcServer;
@@ -28,6 +29,20 @@ export class EthereumProvider {
         method: "net_version",
         jsonrpc: "2.0",
         id: 67
+      })
+      .then(res => {
+        this.handleError(res);
+        return res;
+      });
+  }
+
+  signTransaction(tx: Tx): Promise<any> {
+    return this._rpc
+      .call({
+        method: "eth_signTransaction",
+        jsonrpc: "2.0",
+        id: 1,
+        params: [{ data: "0x", ...tx }]
       })
       .then(res => {
         this.handleError(res);
