@@ -17,10 +17,7 @@ export class EthereumProvider {
         id: 1,
         jsonrpc: "2.0"
       })
-      .then(res => {
-        this.handleError(res);
-        return res;
-      });
+      .then(this.handleResponse);
   }
 
   getNetVersion(): Promise<any> {
@@ -30,10 +27,18 @@ export class EthereumProvider {
         jsonrpc: "2.0",
         id: 67
       })
-      .then(res => {
-        this.handleError(res);
-        return res;
-      });
+      .then(this.handleResponse);
+  }
+
+  estimateGas(tx: Tx): Promise<any> {
+    return this._rpc
+      .call({
+        method: "eth_estimateGas",
+        jsonrpc: "2.0",
+        id: 1,
+        params: [{ ...tx }]
+      })
+      .then(this.handleResponse);
   }
 
   signTransaction(tx: Tx): Promise<any> {
@@ -44,13 +49,10 @@ export class EthereumProvider {
         id: 1,
         params: [{ data: "0x", ...tx }]
       })
-      .then(res => {
-        this.handleError(res);
-        return res;
-      });
+      .then(this.handleResponse);
   }
 
-  private handleError(res: any) {
+  private handleResponse(res: any) {
     if (!res.result && res.error) {
       console.error(res.error);
       throw new Error(
@@ -58,5 +60,6 @@ export class EthereumProvider {
           "An error occured with rpc call"
       );
     }
+    return res;
   }
 }
