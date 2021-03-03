@@ -20,6 +20,17 @@ export class EthereumProvider {
       .then(this.handleResponse);
   }
 
+  getBalance(address: string): Promise<any> {
+    return this._rpc
+      .call({
+        method: "eth_getBalance",
+        params: [address, "latest"],
+        id: 1,
+        jsonrpc: "2.0"
+      })
+      .then(this.handleResponse);
+  }
+
   getNetVersion(): Promise<any> {
     return this._rpc
       .call({

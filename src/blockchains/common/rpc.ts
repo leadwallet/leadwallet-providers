@@ -2,7 +2,7 @@ interface RpcPayload {
   jsonrpc: "2.0";
   method: string;
   params?: Array<any> | Record<string, any>;
-  id?: number;
+  id?: number | string;
 }
 
 export class RpcServer {
