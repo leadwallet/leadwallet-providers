@@ -87,6 +87,50 @@ export class EthereumProvider {
     return this.handleResponse(res);
   }
 
+  async sendERC20CompliantToken(
+    tx: Tx,
+    contractAddress: string,
+    privateKey: string
+  ): Promise<any> {
+    const pk = Buffer.from(privateKey.replace("0x", ""), "hex");
+    const erc20ContractAbi = [];
+    const iFace = new ethers.utils.Interface(erc20ContractAbi);
+    const data = iFace.encodeFunctionData("transfer", [
+      tx.to,
+      ethers.utils.parseEther(tx.value.toString())
+    ]);
+    const t = new EthTransaction({
+      nonce: tx.nonce ? ethers.utils.hexValue(tx.nonce) : null,
+      to: contractAddress,
+      gasLimit: ethers.utils.hexValue(tx.gas),
+      gasPrice: ethers.utils.hexValue(tx.gasPrice),
+      value: "0x",
+      data
+    });
+
+    t.sign(pk);
+
+    const serializedTx = t.serialize().toString("hex");
+
+    const res = await this._rpc.call({
+      method: "eth_sendRawTransaction",
+      jsonrpc: "2.0",
+      id: 1,
+      params: ["0x" + serializedTx]
+    });
+    return this.handleResponse(res);
+  }
+
+  async getTransactionByHash(hash: string): Promise<any> {
+    const res = await this._rpc.call({
+      method: "eth_getTransactionByHash",
+      jsonrpc: "2.0",
+      id: 1,
+      params: [hash]
+    });
+    return this.handleResponse(res);
+  }
+
   private handleResponse(res: any) {
     if (!res.result && res.error) {
       console.error(res.error);
