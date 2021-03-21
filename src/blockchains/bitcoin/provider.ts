@@ -4,7 +4,7 @@ import { RpcServer } from "../common";
 export class BitcoinProvider {
   private _rpc: RpcServer;
 
-  constructor(rpcUrl: string) {
+  constructor(rpcUrl: string = "https://btc.getblock.io") {
     this._rpc = new RpcServer(rpcUrl);
   }
 
@@ -21,21 +21,16 @@ export class BitcoinProvider {
   }
 
   async getAddressInfo(address: string): Promise<any> {
-    const res = await fetch(
-      "https://blockchain.info/rawaddr/" + address,
-      {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
+    const res = await fetch("https://blockchain.info/rawaddr/" + address, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
       }
-    );
+    });
 
     if (res.status >= 400)
-      throw new Error(
-        "Couldn't get info for address: " + address
-      );
+      throw new Error("Couldn't get info for address: " + address);
 
     return Promise.resolve(res.json());
   }

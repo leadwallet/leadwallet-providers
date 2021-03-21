@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "bitcoinjs-lib": "^5.2.0",
+    "ethereumjs-tx": "^2.1.2",
     "ethers": "^5.0.31",
     "events": "^3.3.0",
     "json-rpc-engine": "^6.1.0"

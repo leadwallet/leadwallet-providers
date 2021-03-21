@@ -1,5 +1,5 @@
 export interface Tx {
-  from: string;
+  from?: string;
   to: string;
   gas?: number;
   gasPrice?: number;
