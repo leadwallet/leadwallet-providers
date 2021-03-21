@@ -9,7 +9,9 @@ export class EthereumProvider {
   public address: string;
 
   constructor(rpcUrl: string = "https://eth.getblock.io") {
-    this._rpc = new RpcServer(rpcUrl);
+    this._rpc = rpcUrl
+      ? new RpcServer(rpcUrl)
+      : new RpcServer("https://eth.getblock.io");
   }
 
   generateWallet(mnemonic: string) {
