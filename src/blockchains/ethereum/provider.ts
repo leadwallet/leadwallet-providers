@@ -3,6 +3,7 @@ import ethers from "ethers";
 import { Transaction as EthTransaction } from "ethereumjs-tx";
 import { RpcServer } from "../common";
 import { Tx } from "./tx";
+import erc20ContractAbi from "./tokens/ERC20ABI.json";
 
 export class EthereumProvider {
   private _rpc: RpcServer;
@@ -89,13 +90,13 @@ export class EthereumProvider {
     return this.handleResponse(res);
   }
 
-  async sendERC20CompliantToken(
+  async sendERC20Token(
     tx: Tx,
     contractAddress: string,
     privateKey: string
   ): Promise<any> {
     const pk = Buffer.from(privateKey.replace("0x", ""), "hex");
-    const erc20ContractAbi = [];
+    // const erc20ContractAbi = [];
     const iFace = new ethers.utils.Interface(erc20ContractAbi);
     const data = iFace.encodeFunctionData("transfer", [
       tx.to,
