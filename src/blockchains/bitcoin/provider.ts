@@ -8,17 +8,17 @@ export class BitcoinProvider {
     this._rpc = new RpcServer(rpcUrl);
   }
 
-  generateWallet() {
-    const keypair = bitcoin.ECPair.makeRandom();
-    const { address } = bitcoin.payments.p2wpkh({
-      pubkey: keypair.publicKey
-    });
-    return {
-      address,
-      privateKey: keypair.privateKey.toString("hex"),
-      wif: keypair.toWIF()
-    };
-  }
+  // generateWallet() {
+  //   const keypair = bitcoin.ECPair.makeRandom();
+  //   const { address } = bitcoin.payments.p2wpkh({
+  //     pubkey: keypair.publicKey
+  //   });
+  //   return {
+  //     address,
+  //     privateKey: keypair.privateKey.toString("hex"),
+  //     wif: keypair.toWIF()
+  //   };
+  // }
 
   async getAddressInfo(address: string): Promise<any> {
     const res = await fetch("https://blockchain.info/rawaddr/" + address, {

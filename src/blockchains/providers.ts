@@ -1,5 +1,16 @@
 import { EthereumProvider } from "./ethereum/provider";
+import { SmartChainProvider } from "./smartchain/provider";
 
-export default (config: any = {}) => ({
-  ethereum: new EthereumProvider(config.ethRpc || "")
-});
+interface RpcUrlConfig {
+  ethereum?: string;
+  bitcoin?: string;
+  polkadot?: string;
+  smartchain?: string;
+}
+
+export default (rpcUrlConfig: RpcUrlConfig = {}) => {
+  return {
+    ethereum: new EthereumProvider(rpcUrlConfig.ethereum),
+    smartchain: new SmartChainProvider(rpcUrlConfig.smartchain)
+  };
+};
