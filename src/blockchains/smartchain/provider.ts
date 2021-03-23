@@ -3,15 +3,15 @@ import ethers from "ethers";
 import { Transaction as EthTransaction } from "ethereumjs-tx";
 import { RpcServer } from "../common";
 import { Tx } from "./tx";
-import erc20ContractAbi from "./tokens/ERC20ABI.json";
+import bep20ContractAbi from "./tokens/BEP20ABI.json";
 
-export class EthereumProvider {
+export class SmartChainProvider {
   private _rpc: RpcServer;
 
-  constructor(rpcUrl: string = "https://eth.getblock.io") {
+  constructor(rpcUrl: string = "https://bsc.getblock.io") {
     this._rpc = rpcUrl
       ? new RpcServer(rpcUrl)
-      : new RpcServer("https://eth.getblock.io");
+      : new RpcServer("https://bsc.getblock.io");
   }
 
   async getAccounts(): Promise<any> {
@@ -85,14 +85,14 @@ export class EthereumProvider {
     return this.handleResponse(res);
   }
 
-  async sendERC20Token(
+  async sendBEP20Token(
     tx: Tx,
     contractAddress: string,
     privateKey: string
   ): Promise<any> {
     const pk = Buffer.from(privateKey.replace("0x", ""), "hex");
     // const erc20ContractAbi = [];
-    const iFace = new ethers.utils.Interface(erc20ContractAbi);
+    const iFace = new ethers.utils.Interface(bep20ContractAbi);
     const data = iFace.encodeFunctionData("transfer", [
       tx.to,
       ethers.utils.parseEther(tx.value.toString())
