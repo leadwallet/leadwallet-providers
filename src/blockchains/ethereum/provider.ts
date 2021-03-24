@@ -14,46 +14,50 @@ export class EthereumProvider {
       : new RpcServer("https://eth.getblock.io");
   }
 
-  async getAccounts(): Promise<any> {
-    const res = await this._rpc.call({
-      method: "eth_accounts",
-      params: [],
-      id: 1,
-      jsonrpc: "2.0"
-    });
-    return this.handleResponse(res);
+  getAccounts(): Promise<any> {
+    return this._rpc
+      .call({
+        method: "eth_accounts",
+        params: [],
+        id: 1,
+        jsonrpc: "2.0"
+      })
+      .then(this.handleResponse);
   }
 
-  async getBalance(address: string): Promise<any> {
-    const res = await this._rpc.call({
-      method: "eth_getBalance",
-      params: [address, "latest"],
-      id: 1,
-      jsonrpc: "2.0"
-    });
-    return this.handleResponse(res);
+  getBalance(address: string): Promise<any> {
+    return this._rpc
+      .call({
+        method: "eth_getBalance",
+        params: [address, "latest"],
+        id: 1,
+        jsonrpc: "2.0"
+      })
+      .then(this.handleResponse);
   }
 
-  async getNetVersion(): Promise<any> {
-    const res = await this._rpc.call({
-      method: "net_version",
-      jsonrpc: "2.0",
-      id: 67
-    });
-    return this.handleResponse(res);
+  getNetVersion(): Promise<any> {
+    return this._rpc
+      .call({
+        method: "net_version",
+        jsonrpc: "2.0",
+        id: 67
+      })
+      .then(this.handleResponse);
   }
 
-  async estimateGas(tx: Tx): Promise<any> {
-    const res = await this._rpc.call({
-      method: "eth_estimateGas",
-      jsonrpc: "2.0",
-      id: 1,
-      params: [{ ...tx }]
-    });
-    return this.handleResponse(res);
+  estimateGas(tx: Tx): Promise<any> {
+    return this._rpc
+      .call({
+        method: "eth_estimateGas",
+        jsonrpc: "2.0",
+        id: 1,
+        params: [{ ...tx }]
+      })
+      .then(this.handleResponse);
   }
 
-  async sendRawTransaction(
+  sendRawTransaction(
     tx: Tx,
     privateKey: string,
     chain: string = "mainnet"
@@ -76,16 +80,17 @@ export class EthereumProvider {
 
     const serializedTx = t.serialize().toString("hex");
 
-    const res = await this._rpc.call({
-      method: "eth_sendRawTransaction",
-      jsonrpc: "2.0",
-      id: 1,
-      params: ["0x" + serializedTx]
-    });
-    return this.handleResponse(res);
+    return this._rpc
+      .call({
+        method: "eth_sendRawTransaction",
+        jsonrpc: "2.0",
+        id: 1,
+        params: ["0x" + serializedTx]
+      })
+      .then(this.handleResponse);
   }
 
-  async sendERC20Token(
+  sendERC20Token(
     tx: Tx,
     contractAddress: string,
     privateKey: string
@@ -110,23 +115,25 @@ export class EthereumProvider {
 
     const serializedTx = t.serialize().toString("hex");
 
-    const res = await this._rpc.call({
-      method: "eth_sendRawTransaction",
-      jsonrpc: "2.0",
-      id: 1,
-      params: ["0x" + serializedTx]
-    });
-    return this.handleResponse(res);
+    return this._rpc
+      .call({
+        method: "eth_sendRawTransaction",
+        jsonrpc: "2.0",
+        id: 1,
+        params: ["0x" + serializedTx]
+      })
+      .then(this.handleResponse);
   }
 
-  async getTransactionByHash(hash: string): Promise<any> {
-    const res = await this._rpc.call({
-      method: "eth_getTransactionByHash",
-      jsonrpc: "2.0",
-      id: 1,
-      params: [hash]
-    });
-    return this.handleResponse(res);
+  getTransactionByHash(hash: string): Promise<any> {
+    return this._rpc
+      .call({
+        method: "eth_getTransactionByHash",
+        jsonrpc: "2.0",
+        id: 1,
+        params: [hash]
+      })
+      .then(this.handleResponse);
   }
 
   private handleResponse(res: any) {
