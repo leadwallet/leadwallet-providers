@@ -125,6 +125,14 @@ export class SmartChainProvider {
       .then(this.handleResponse);
   }
 
+  getTransactionsByAddress(address: string): Promise<any> {
+    return fetch(
+      `https://api.bscscan.com/api?module=account&action=txlist&address=${address}`
+    )
+      .then(res => res.json())
+      .then(this.handleResponse);
+  }
+
   getTransactionByHash(hash: string): Promise<any> {
     return this._rpc
       .call({

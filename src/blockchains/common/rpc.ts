@@ -6,6 +6,7 @@ interface RpcPayload {
 }
 
 export class RpcServer {
+  private apiKey: string = "8b972b80-88f6-444e-bfbe-13e2a5633e52";
   private url: string = "";
 
   constructor(url: string) {
@@ -19,7 +20,8 @@ export class RpcServer {
         body: JSON.stringify({ ...payload }),
         headers: {
           Accept: "application/json",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "x-api-key": this.apiKey
         }
       });
       const responseJson = await res.json();
