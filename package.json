@@ -23,11 +23,13 @@
   },
   "homepage": "https://github.com/leadwallet/leadwallet-providers#readme",
   "devDependencies": {
+    "@types/bigi": "^1.4.2",
     "@types/events": "^3.0.0",
     "typescript": "^4.2.2"
   },
   "dependencies": {
     "@polkadot/api": "^4.2.1",
+    "bigi": "^1.4.2",
     "bitcoinjs-lib": "^5.2.0",
     "ethereumjs-tx": "^2.1.2",
     "ethers": "^5.0.31",

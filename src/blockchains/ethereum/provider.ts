@@ -145,9 +145,14 @@ export class EthereumProvider {
   }
 
   private handleResponse(res: any) {
-    if (!res.result && res.error) {
-      console.error(res.error);
-      throw new Error(res.error.message || "An error occured with rpc call");
+    if (!res.result) {
+      if (res.error) {
+        console.error(res.error);
+        throw new Error(res.error.message);
+      } else {
+        console.error(res);
+        throw new Error("An error occured with the rpc call");
+      }
     }
     return res;
   }

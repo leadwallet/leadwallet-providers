@@ -1,11 +1,14 @@
 import * as bitcoin from "bitcoinjs-lib";
 import { RpcServer } from "../common";
+import { Tx } from "./tx";
 
 export class BitcoinProvider {
   private _rpc: RpcServer;
 
   constructor(rpcUrl: string = "https://btc.getblock.io") {
-    this._rpc = new RpcServer(rpcUrl);
+    this._rpc = rpcUrl
+      ? new RpcServer(rpcUrl)
+      : new RpcServer("https://btc.getblock.io");
   }
 
   // generateWallet() {
@@ -35,10 +38,37 @@ export class BitcoinProvider {
     return Promise.resolve(res.json());
   }
 
+  estimateFee(confirmations: number = 4): Promise<any> {
+    return this._rpc
+      .call({
+        method: "estimatesmartfee",
+        jsonrpc: "2.0",
+        id: 1,
+        params: [confirmations]
+      })
+      .then(this.handleResponse);
+  }
+
+  // sendRawTransaction(tx: Tx): Promise<any> {
+  // }
+
   // getBalance(address: string): Promise<any> {
   //  return this._rpc.call({
   //   method: "getbalance",
   //   id: "curltest"
   //  })
   // }
+
+  private handleResponse(res: any) {
+    if (!res.result) {
+      if (res.error) {
+        console.error(res.error);
+        throw new Error(res.error.message);
+      } else {
+        console.error(res);
+        throw new Error("An error occured with the rpc call");
+      }
+    }
+    return res;
+  }
 }
