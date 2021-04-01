@@ -86,24 +86,35 @@ export class BitcoinProvider {
         value: parseFloat(transaction.value)
       });
 
-    txn
+    const isValidated = txn
       .addInputs(
         inputs.map(i => ({
           hash: i.hash,
           index: i.index,
-          nonWitnessUtxo: Buffer.from(i.script, "hex")
+          witnessUtxo: {
+            script: Buffer.from(i.script, "hex"),
+            value: i.value * Math.pow(10, 8)
+          }
         }))
       )
-      .addOutputs([
-        {
-          address: tx.to,
-          value: tx.value * Math.pow(10, 8)
-        },
-        {
-          address: payments.address,
-          value: inputs.map(i => i.value).reduce((a, b) => a + b)
-        }
-      ]);
+      .addOutput({
+        address: tx.to,
+        value: tx.value * Math.pow(10, 8)
+      })
+      .signAllInputs(keypair)
+      .validateSignaturesOfAllInputs();
+
+    let hex: string = "";
+
+    if (isValidated) hex = txn.finalizeAllInputs().extractTransaction().toHex();
+
+    return this._rpc
+      .call({
+        jsonrpc: "2.0",
+        method: "sendrawtransaction",
+        params: [hex]
+      })
+      .then(this.handleResponse);
   }
 
   // getBalance(address: string): Promise<any> {
