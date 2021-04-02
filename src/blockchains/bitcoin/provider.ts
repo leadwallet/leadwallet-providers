@@ -5,10 +5,20 @@ import { Tx } from "./tx";
 export class BitcoinProvider {
   private _rpc: RpcServer;
 
-  constructor(rpcUrl: string = "https://btc.getblock.io") {
+  constructor(
+    rpcUrl: string = "https://btc.getblock.io" +
+    (!!process.env.NODE_ENV && process.env.NODE_ENV === "production")
+      ? "/mainnet"
+      : "/testnet"
+  ) {
+    const network =
+      !!process.env.NODE_ENV && process.env.NODE_ENV === "production"
+        ? "/mainnet"
+        : "/testnet";
+
     this._rpc = rpcUrl
       ? new RpcServer(rpcUrl)
-      : new RpcServer("https://btc.getblock.io");
+      : new RpcServer("https://btc.getblock.io" + network);
   }
 
   // generateWallet() {
@@ -66,10 +76,10 @@ export class BitcoinProvider {
     const unspentTxResponseAsJson = await res.json();
     const network = isDev ? bitcoin.networks.testnet : bitcoin.networks.bitcoin;
     const keypair = bitcoin.ECPair.fromWIF(privateKey, network);
-    const payments = bitcoin.payments.p2wpkh({
-      pubkey: keypair.publicKey,
-      network
-    });
+    // const payments = bitcoin.payments.p2wpkh({
+    //   pubkey: keypair.publicKey,
+    //   network
+    // });
     const txn = new bitcoin.Psbt({ network });
     let inputs: Array<{
       hash: string;

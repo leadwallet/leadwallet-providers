@@ -8,10 +8,20 @@ import erc20ContractAbi from "./tokens/ERC20ABI.json";
 export class EthereumProvider {
   private _rpc: RpcServer;
 
-  constructor(rpcUrl: string = "https://eth.getblock.io") {
+  constructor(
+    rpcUrl: string = "https://eth.getblock.io" +
+    (!!process.env.NODE_ENV && process.env.NODE_ENV === "production")
+      ? "/mainnet"
+      : "/testnet"
+  ) {
+    const network =
+      !!process.env.NODE_ENV && process.env.NODE_ENV === "production"
+        ? "/mainnet"
+        : "/testnet";
+
     this._rpc = rpcUrl
       ? new RpcServer(rpcUrl)
-      : new RpcServer("https://eth.getblock.io");
+      : new RpcServer("https://eth.getblock.io" + network);
   }
 
   getAccounts(): Promise<any> {

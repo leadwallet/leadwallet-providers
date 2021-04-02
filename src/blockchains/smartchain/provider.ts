@@ -8,10 +8,20 @@ import bep20ContractAbi from "./tokens/BEP20ABI.json";
 export class SmartChainProvider {
   private _rpc: RpcServer;
 
-  constructor(rpcUrl: string = "https://bsc.getblock.io") {
+  constructor(
+    rpcUrl: string = "https://bsc.getblock.io" +
+    (!!process.env.NODE_ENV && process.env.NODE_ENV === "production")
+      ? "/mainnet"
+      : "/testnet"
+  ) {
+    const network =
+      !!process.env.NODE_ENV && process.env.NODE_ENV === "production"
+        ? "/mainnet"
+        : "/testnet";
+
     this._rpc = rpcUrl
       ? new RpcServer(rpcUrl)
-      : new RpcServer("https://bsc.getblock.io");
+      : new RpcServer("https://bsc.getblock.io" + network);
   }
 
   getAccounts(): Promise<any> {
