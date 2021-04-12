@@ -1,3 +1,5 @@
+import fetch from "node-fetch";
+
 interface RpcPayload {
   jsonrpc: "2.0";
   method: string;

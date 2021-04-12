@@ -1,0 +1,14 @@
+{
+ "compilerOptions": {
+  "rootDir": "src",
+  "outDir": "build",
+  "esModuleInterop": true,
+  "module": "commonjs",
+  "moduleResolution": "node",
+  "sourceMap": true,
+  "lib": ["dom", "es2015"],
+  "resolveJsonModule": true,
+  "typeRoots": ["build/@types"],
+  "declaration": true
+ }
+}

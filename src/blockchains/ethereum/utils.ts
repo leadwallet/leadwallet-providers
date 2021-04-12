@@ -1,6 +1,6 @@
-import ethers from "ethers";
+import { ethers } from "ethers";
 
-class Utils {
+export class Utils {
   static walletFromMnemonic(mnemonic: string) {
     const { address, privateKey } = ethers.Wallet.fromMnemonic(mnemonic);
     return { address, privateKey };
@@ -11,5 +11,3 @@ class Utils {
     return { address, privateKey };
   }
 }
-
-export type utils = Utils;
